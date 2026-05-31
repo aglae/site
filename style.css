@@ -1,0 +1,192 @@
+/* ============================================================
+   Design tokens (from Figma)
+   ============================================================ */
+:root {
+  --color-primary:   #8a1b61;
+  --color-heading:   #3c4156;
+  --color-body:      #606689;
+  --color-bg:        #f3f4f7;
+  --color-white:     #ffffff;
+
+  --font-heading: 'Fira Sans', sans-serif;
+  --font-body:    'Nunito Sans', sans-serif;
+}
+
+/* ============================================================
+   Reset / base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-white);
+  color: var(--color-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   Hero — full-viewport section
+   ============================================================ */
+.hero {
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* ============================================================
+   Intro wrapper — centres content, adds bottom breathing room
+   ============================================================ */
+.intro-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+}
+
+/* ============================================================
+   Intro — the content column
+   ============================================================ */
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 640px;
+  max-width: 100%;
+}
+
+/* ============================================================
+   Logo mark
+   ============================================================ */
+.logo-mark {
+  display: block;
+  width: 26px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* ============================================================
+   Text block
+   ============================================================ */
+.text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: normal;
+  letter-spacing: -0.56px;
+  color: var(--color-heading);
+}
+
+p {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--color-body);
+}
+
+p a {
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   Buttons row
+   ============================================================ */
+.buttons {
+  display: flex;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 100px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   Responsive — Tablet (≤ 900px)
+   ============================================================ */
+@media (max-width: 900px) {
+  .intro {
+    width: 480px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   Responsive — Mobile (≤ 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  .hero {
+    padding: 40px 24px;
+    align-items: flex-start;
+    padding-top: 120px;
+  }
+
+  .intro-wrapper {
+    padding-bottom: 40px;
+    justify-content: flex-start;
+  }
+
+  .intro {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+}
