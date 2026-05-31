@@ -2,11 +2,13 @@
    Design tokens (from Figma)
    ============================================================ */
 :root {
-  --color-primary:   #8a1b61;
-  --color-heading:   #3c4156;
-  --color-body:      #606689;
-  --color-bg:        #f3f4f7;
-  --color-white:     #ffffff;
+  --color-primary:         #8a1b61;
+  --color-primary-hover:   #9F1F70;
+  --color-primary-pressed: #57113D;
+  --color-heading:         #3c4156;
+  --color-body:            #606689;
+  --color-bg:              #f3f4f7;
+  --color-white:           #ffffff;
 
   --font-heading: 'Fira Sans', sans-serif;
   --font-body:    'Nunito Sans', sans-serif;
@@ -109,8 +111,18 @@ p a {
   text-decoration: none;
 }
 
+p a {
+  display: inline-block;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
 p a:hover {
-  text-decoration: underline;
+  color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+p a:active {
+  color: var(--color-primary-pressed);
 }
 
 /* ============================================================
@@ -137,12 +149,12 @@ p a:hover {
 }
 
 .btn:hover {
-  opacity: 0.85;
-  transform: translateY(-2px);
+  background-color: var(--color-primary-hover);
+  transform: translateY(-4px);
 }
 
 .btn:active {
-  opacity: 1;
+  background-color: var(--color-primary-pressed);
   transform: translateY(0);
 }
 
