@@ -148,9 +148,6 @@ p a {
   font-weight: 700;
   color: var(--color-primary);
   text-decoration: none;
-}
-
-p a {
   display: inline-block;
   transition: color 0.2s ease, transform 0.15s ease;
 }
@@ -184,7 +181,7 @@ p a:active {
   color: var(--color-white);
   text-decoration: none;
   flex-shrink: 0;
-  transition: opacity 0.2s ease, transform 0.15s ease;
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
 .btn:hover {
