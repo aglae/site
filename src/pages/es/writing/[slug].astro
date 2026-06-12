@@ -1,0 +1,16 @@
+---
+import WritingPiece from '../../../views/WritingPiece.astro';
+import { getPieces, pieceSlug } from '../../../lib/forest';
+
+export async function getStaticPaths() {
+  const pieces = await getPieces('es');
+  return pieces.map((piece) => ({
+    params: { slug: pieceSlug(piece) },
+    props: { piece },
+  }));
+}
+
+const { piece } = Astro.props;
+---
+
+<WritingPiece lang="es" piece={piece} />

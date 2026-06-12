@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import { type Lang, t, localePath, pieceLabel, formatDate } from '../lib/i18n';
+import { getPieces, pieceSlug } from '../lib/forest';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const pieces = await getPieces(lang);
+
+// Topography over timeline: themes first
+const themes = [...new Set(pieces.flatMap((p) => p.data.themes))].sort();
+const recentlyDisturbed = pieces.slice(0, 3);
+---
+
+<Base
+  title={t(lang, 'writing.title')}
+  description={t(lang, 'writing.tagline')}
+  lang={lang}
+  path="/writing"
+>
+  <main>
+    <div class="container">
+      <h1>{t(lang, 'writing.title')}</h1>
+      <p class="tagline">{t(lang, 'writing.tagline')}</p>
+
+      {
+        themes.length > 0 && (
+          <section class="themes">
+            <h2>{t(lang, 'writing.themes')}</h2>
+            <div>
+              {themes.map((theme) => (
+                <a class="theme-tag" href={localePath(lang, `/writing/theme/${theme}`)}>
+                  {theme}
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        recentlyDisturbed.length > 0 && (
+          <section>
+            <h2>{t(lang, 'writing.recentlyDisturbed')}</h2>
+            <ul class="piece-list">
+              {recentlyDisturbed.map((p) => (
+                <li>
+                  <span class="piece-state">{pieceLabel(lang, p.data.treeState, p.data.type)}</span>
+                  <h3>
+                    <a href={localePath(lang, `/writing/${pieceSlug(p)}`)}>{p.data.title}</a>
+                  </h3>
+                  <span class="piece-meta">
+                    {t(lang, 'meta.lastDisturbed')} {formatDate(lang, p.data.lastDisturbed)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <section>
+        <h2>{t(lang, 'writing.allPieces')}</h2>
+        <ul class="piece-list">
+          {
+            pieces.map((p) => (
+              <li>
+                <span class="piece-state">{pieceLabel(lang, p.data.treeState, p.data.type)}</span>
+                <h3>
+                  <a href={localePath(lang, `/writing/${pieceSlug(p)}`)}>{p.data.title}</a>
+                </h3>
+                <div>
+                  {p.data.themes.map((theme) => (
+                    <a class="theme-tag" href={localePath(lang, `/writing/theme/${theme}`)}>
+                      {theme}
+                    </a>
+                  ))}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .tagline {
+    font-style: italic;
+    color: var(--color-muted);
+    margin-bottom: 3rem;
+  }
+  section {
+    margin-top: 3rem;
+  }
+  .themes h2,
+  section h2 {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+  }
+</style>

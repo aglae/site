@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import DesignPiece from '../../views/DesignPiece.astro';
+
+export async function getStaticPaths() {
+  const works = await getCollection('design');
+  return works
+    .filter((w) => w.id.startsWith('en/'))
+    .map((work) => ({
+      params: { slug: work.id.split('/').slice(1).join('/') },
+      props: { work },
+    }));
+}
+
+const { work } = Astro.props;
+---
+
+<DesignPiece lang="en" work={work} />

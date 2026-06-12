@@ -1,0 +1,110 @@
+---
+import { type Lang, t, localePath, pieceLabel } from '../lib/i18n';
+import type { EchoCandidate } from '../lib/forest';
+
+interface Props {
+  lang: Lang;
+  pool: EchoCandidate[];
+}
+
+const { lang, pool } = Astro.props;
+
+// Static fallback: top 3 by weight. The script below reshuffles on each load.
+const initial = pool.slice(0, 3);
+const poolWithLabels = pool.map((c) => ({
+  ...c,
+  href: localePath(lang, `/writing/${c.slug}`),
+  state: pieceLabel(lang, c.treeState, c.type),
+}));
+---
+
+{
+  pool.length > 0 && (
+    <aside class="echoes" data-pool={JSON.stringify(poolWithLabels)}>
+      <h2>{t(lang, 'echoes.title')}</h2>
+      <p class="echoes-subtitle">{t(lang, 'echoes.subtitle')}</p>
+      <ul id="echo-list">
+        {initial.map((c) => (
+          <li>
+            <span class="piece-state">{pieceLabel(lang, c.treeState, c.type)}</span>
+            <a href={localePath(lang, `/writing/${c.slug}`)}>{c.title}</a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}
+
+<style>
+  .echoes {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .echoes h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  .echoes-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 1.25rem;
+  }
+  .echoes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .echoes li {
+    margin-bottom: 1rem;
+  }
+  .echoes .piece-state {
+    display: block;
+    font-size: 0.7rem;
+  }
+  .echoes a {
+    color: var(--color-heading);
+    font-weight: 500;
+    font-family: var(--font-heading);
+  }
+  .echoes a:hover {
+    color: var(--color-primary);
+  }
+</style>
+
+<script>
+  // The forest surfaces nearby things, but not always the same things.
+  // Weighted random pick of up to 3, varying between page loads.
+  const aside = document.querySelector('.echoes') as HTMLElement | null;
+  const list = document.getElementById('echo-list');
+  if (aside && list && aside.dataset.pool) {
+    type Candidate = {
+      href: string;
+      title: string;
+      state: string;
+      weight: number;
+    };
+    const pool: Candidate[] = JSON.parse(aside.dataset.pool);
+    const picks: Candidate[] = [];
+    const remaining = [...pool];
+    while (picks.length < 3 && remaining.length > 0) {
+      const total = remaining.reduce((s, c) => s + c.weight, 0);
+      let r = Math.random() * total;
+      let idx = 0;
+      for (let i = 0; i < remaining.length; i++) {
+        r -= remaining[i].weight;
+        if (r <= 0) {
+          idx = i;
+          break;
+        }
+      }
+      picks.push(remaining.splice(idx, 1)[0]);
+    }
+    list.innerHTML = picks
+      .map(
+        (c) =>
+          `<li><span class="piece-state">${c.state}</span><a href="${c.href}">${c.title}</a></li>`,
+      )
+      .join('');
+  }
+</script>

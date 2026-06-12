@@ -1,0 +1,95 @@
+---
+import { type Lang, t, localePath } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  path: string;
+  alternate: string | null;
+}
+
+const { lang, alternate } = Astro.props;
+
+const nav = [
+  { href: localePath(lang, '/design'), label: t(lang, 'nav.design') },
+  { href: localePath(lang, '/writing'), label: t(lang, 'nav.writing') },
+  { href: localePath(lang, '/about'), label: t(lang, 'nav.about') },
+];
+---
+
+<header class="site-header">
+  <div class="container-wide header-inner">
+    <a href={localePath(lang, '/')} class="logo" aria-label="Home">
+      <img src="/img/aglae-logo-symbol.svg" alt="Aglaé" width="32" height="32" />
+    </a>
+    <nav>
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      {
+        alternate && (
+          <a href={alternate} class="lang-toggle" title={t(lang, 'lang.switch')}>
+            {lang === 'en' ? 'ES' : 'EN'}
+          </a>
+        )
+      }
+      <button id="theme-toggle" aria-label="Toggle theme">◐</button>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    padding: 1.5rem 0;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo img {
+    display: block;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  nav a {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--color-heading);
+  }
+  nav a:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  .lang-toggle {
+    font-size: 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+  }
+  #theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    padding: 0;
+    line-height: 1;
+  }
+  #theme-toggle:hover {
+    color: var(--color-primary);
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const current = root.dataset.theme ?? (prefersDark ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    localStorage.setItem('theme', next);
+  });
+</script>

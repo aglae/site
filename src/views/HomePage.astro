@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { type Lang, t, localePath } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  en: {
+    title: 'Aglaé',
+    hello: 'Hi, I’m Aglaé.',
+    intro:
+      'I design systems and interfaces by day, and leave thoughts in a quiet forest by night. This site holds both: a body of design work, and a place called the Empty Forest where writing goes to exist without having to justify itself.',
+  },
+  es: {
+    title: 'Aglaé',
+    hello: 'Hola, soy Aglaé.',
+    intro:
+      'Diseño sistemas e interfaces de día, y dejo pensamientos en un bosque tranquilo de noche. Este sitio contiene ambas cosas: un cuerpo de trabajo de diseño, y un lugar llamado el Bosque Vacío donde la escritura existe sin tener que justificarse.',
+  },
+}[lang];
+---
+
+<Base title={copy.title} description={copy.intro} lang={lang} path="/">
+  <main>
+    <div class="container hero">
+      <h1>{copy.hello}</h1>
+      <p class="intro">{copy.intro}</p>
+      <div class="hero-links">
+        <a href={localePath(lang, '/design')} class="hero-link">
+          {t(lang, 'home.seeWork')} →
+        </a>
+        <a href={localePath(lang, '/writing')} class="hero-link forest">
+          {t(lang, 'home.enterForest')} →
+        </a>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .hero {
+    padding-top: 4rem;
+  }
+  .intro {
+    font-size: 1.15rem;
+    max-width: 36rem;
+  }
+  .hero-links {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .hero-link {
+    font-family: var(--font-heading);
+  }
+  .hero-link.forest {
+    color: var(--color-secondary);
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+import ThemePage from '../../../views/ThemePage.astro';
+import { getPieces } from '../../../lib/forest';
+
+export async function getStaticPaths() {
+  const pieces = await getPieces('en');
+  const themes = [...new Set(pieces.flatMap((p) => p.data.themes))];
+  return themes.map((theme) => ({ params: { theme } }));
+}
+
+const { theme } = Astro.params;
+---
+
+<ThemePage lang="en" theme={theme} />

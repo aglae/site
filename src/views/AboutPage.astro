@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import { type Lang, t } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  en: {
+    title: 'About',
+    paragraphs: [
+      'PLACEHOLDER — This page bridges the professional and the personal. A few paragraphs about who Aglaé is: the designer who builds systems and the person who leaves thoughts in a forest.',
+      'Replace this with your own words. The tone here can be warmer and stranger than the Design section, but more grounded than the Empty Forest.',
+    ],
+  },
+  es: {
+    title: 'Sobre mí',
+    paragraphs: [
+      'PLACEHOLDER — Esta página une lo profesional y lo personal. Unos párrafos sobre quién es Aglaé: la diseñadora que construye sistemas y la persona que deja pensamientos en un bosque.',
+      'Reemplaza esto con tus propias palabras. El tono aquí puede ser más cálido y extraño que la sección de Diseño, pero más aterrizado que el Bosque Vacío.',
+    ],
+  },
+}[lang];
+---
+
+<Base title={copy.title} lang={lang} path="/about">
+  <main>
+    <div class="container">
+      <h1>{copy.title}</h1>
+      {copy.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  </main>
+</Base>

@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { type Lang, t, localePath, pieceLabel } from '../lib/i18n';
+import { getPieces, pieceSlug } from '../lib/forest';
+
+interface Props {
+  lang: Lang;
+  theme: string;
+}
+
+const { lang, theme } = Astro.props;
+const pieces = (await getPieces(lang)).filter((p) =>
+  p.data.themes.includes(theme),
+);
+
+const heading = {
+  en: `Pieces along “${theme}”`,
+  es: `Piezas en el sendero “${theme}”`,
+}[lang];
+---
+
+<Base title={heading} lang={lang} path={`/writing/theme/${theme}`}>
+  <main>
+    <div class="container">
+      <p class="breadcrumb">
+        <a href={localePath(lang, '/writing')}>← {t(lang, 'writing.title')}</a>
+      </p>
+      <h1>{heading}</h1>
+      <ul class="piece-list">
+        {
+          pieces.map((p) => (
+            <li>
+              <span class="piece-state">{pieceLabel(lang, p.data.treeState, p.data.type)}</span>
+              <h3>
+                <a href={localePath(lang, `/writing/${pieceSlug(p)}`)}>{p.data.title}</a>
+              </h3>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+</style>

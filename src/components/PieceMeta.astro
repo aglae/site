@@ -1,0 +1,47 @@
+---
+import {
+  type Lang,
+  t,
+  formatDate,
+  pieceLabel,
+  translationNotice,
+} from '../lib/i18n';
+import type { Piece } from '../lib/forest';
+
+interface Props {
+  lang: Lang;
+  piece: Piece;
+}
+
+const { lang, piece } = Astro.props;
+const d = piece.data;
+const notice = translationNotice(lang, d.originalLanguage, d.translation?.[lang]);
+const showSpoilers = d.spoilers && d.spoilers !== 'none';
+---
+
+<div class="piece-header-meta">
+  <span class="piece-state">{pieceLabel(lang, d.treeState, d.type)}</span>
+  <p class="piece-meta">
+    {t(lang, 'meta.firstLeft')} {formatDate(lang, d.firstLeft)} ·{' '}
+    {t(lang, 'meta.lastDisturbed')} {formatDate(lang, d.lastDisturbed)}
+    <br />
+    {notice}
+    {
+      showSpoilers && (
+        <>
+          <br />
+          {t(lang, 'meta.spoilers')}: {d.spoilers}
+        </>
+      )
+    }
+  </p>
+</div>
+
+<style>
+  .piece-header-meta {
+    margin-bottom: 2.5rem;
+  }
+  .piece-meta {
+    margin-top: 0.5rem;
+  }
+</style>

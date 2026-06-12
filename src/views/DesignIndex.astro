@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { type Lang, t, localePath } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  en: 'Not case studies — a curated archive of things made, shaped, and shipped.',
+  es: 'No son casos de estudio: un archivo curado de cosas hechas, moldeadas y publicadas.',
+}[lang];
+
+const all = await getCollection('design');
+const works = all
+  .filter((w) => w.id.startsWith(`${lang}/`))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title={t(lang, 'design.title')} description={copy} lang={lang} path="/design">
+  <main>
+    <div class="container">
+      <h1>{t(lang, 'design.title')}</h1>
+      <p class="tagline">{copy}</p>
+      <ul class="piece-list">
+        {
+          works.map((w) => (
+            <li>
+              {w.data.year && <span class="piece-state">{w.data.year}</span>}
+              <h3>
+                <a href={localePath(lang, `/design/${w.id.split('/').slice(1).join('/')}`)}>
+                  {w.data.title}
+                </a>
+              </h3>
+              <p class="summary">{w.data.summary}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .tagline {
+    color: var(--color-muted);
+    margin-bottom: 3rem;
+  }
+  .summary {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+</style>

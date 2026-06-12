@@ -1,0 +1,40 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { type Lang, t, localePath } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  work: CollectionEntry<'design'>;
+}
+
+const { lang, work } = Astro.props;
+const { Content } = await render(work);
+const slug = work.id.split('/').slice(1).join('/');
+---
+
+<Base title={work.data.title} description={work.data.summary} lang={lang} path={`/design/${slug}`}>
+  <main>
+    <article class="container">
+      <p class="breadcrumb">
+        <a href={localePath(lang, '/design')}>← {t(lang, 'design.title')}</a>
+      </p>
+      {work.data.year && <span class="piece-state">{work.data.year}</span>}
+      <h1>{work.data.title}</h1>
+      <p class="summary">{work.data.summary}</p>
+      <Content />
+    </article>
+  </main>
+</Base>
+
+<style>
+  .breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .summary {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    margin-bottom: 3rem;
+  }
+</style>

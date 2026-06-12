@@ -1,0 +1,275 @@
+/* ---------------------------------------------------------------
+   Design tokens — from the project brief.
+   Muted, cool palette with one warm accent. Low contrast by choice.
+   --------------------------------------------------------------- */
+
+:root {
+  /* Primary — burgundy/plum (personality color) */
+  --primary-050: #fceef7;
+  --primary-100: #f5cae5;
+  --primary-200: #eea6d3;
+  --primary-300: #e782c2;
+  --primary-400: #e05fb0;
+  --primary-500: #d93b9e;
+  --primary-600: #c32689;
+  --primary-700: #9f1f70;
+  --primary-800: #8a1b61;
+  --primary-900: #57113d;
+  --primary-950: #330a24;
+
+  /* Secondary — steel blue */
+  --secondary-050: #edf7fc;
+  --secondary-100: #dceef9;
+  --secondary-200: #b2daf0;
+  --secondary-300: #77bce4;
+  --secondary-400: #3b9fd8;
+  --secondary-500: #2584bb;
+  --secondary-600: #2072a2;
+  --secondary-700: #1b618a;
+  --secondary-800: #154865;
+  --secondary-900: #102f41;
+  --secondary-950: #0b1d28;
+
+  /* Neutral — blue-gray */
+  --neutral-white: #ffffff;
+  --neutral-050: #f3f4f7;
+  --neutral-100: #dadce5;
+  --neutral-200: #c1c4d3;
+  --neutral-300: #a7abc2;
+  --neutral-400: #8e93b0;
+  --neutral-500: #757b9f;
+  --neutral-600: #606689;
+  --neutral-700: #4e5370;
+  --neutral-800: #3c4156;
+  --neutral-900: #2c2f3f;
+  --neutral-950: #191b24;
+
+  /* Semantic */
+  --color-primary: var(--primary-800);
+  --color-secondary: var(--secondary-500);
+  --color-heading: var(--neutral-800);
+  --color-body: var(--neutral-600);
+  --color-muted: var(--neutral-400);
+  --color-bg: var(--neutral-050);
+  --color-surface: var(--neutral-white);
+  --color-border: var(--neutral-100);
+  --color-white: var(--neutral-white);
+
+  --font-heading: 'Fira Sans', sans-serif;
+  --font-body: 'Nunito Sans', sans-serif;
+
+  --space-unit: 0.5rem;
+  --max-width: 42rem;
+  --max-width-wide: 64rem;
+}
+
+/* Dark mode: palette flips per the brief's dark column */
+:root[data-theme='dark'] {
+  --color-primary: var(--primary-400);
+  --color-secondary: var(--secondary-400);
+  --color-heading: var(--neutral-050);
+  --color-body: var(--neutral-200);
+  --color-muted: var(--neutral-400);
+  --color-bg: var(--neutral-950);
+  --color-surface: var(--neutral-900);
+  --color-border: var(--neutral-800);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-primary: var(--primary-400);
+    --color-secondary: var(--secondary-400);
+    --color-heading: var(--neutral-050);
+    --color-body: var(--neutral-200);
+    --color-muted: var(--neutral-400);
+    --color-bg: var(--neutral-950);
+    --color-surface: var(--neutral-900);
+    --color-border: var(--neutral-800);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Base
+   --------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-body);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  color: var(--color-heading);
+  line-height: 1.25;
+  margin: 0 0 1rem;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+}
+
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0 0 1.25rem;
+}
+
+/* Links in body text: bold, accent, underline on hover only */
+a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--primary-200);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+code {
+  font-size: 0.9em;
+  background: var(--color-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 3rem 0;
+}
+
+::selection {
+  background: var(--primary-100);
+  color: var(--primary-900);
+}
+
+:root[data-theme='dark'] ::selection {
+  background: var(--primary-900);
+  color: var(--primary-100);
+}
+
+/* ---------------------------------------------------------------
+   Layout helpers
+   --------------------------------------------------------------- */
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.container-wide {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+main {
+  padding: 4rem 0 6rem;
+}
+
+/* ---------------------------------------------------------------
+   Shared components
+   --------------------------------------------------------------- */
+
+/* Tree state + type chip, e.g. "Crooked Reflection" */
+.piece-state {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.piece-meta {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.theme-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.1rem 0.7rem;
+  margin: 0 0.35rem 0.5rem 0;
+}
+
+a.theme-tag:hover {
+  text-decoration: none;
+  border-color: var(--color-secondary);
+}
+
+.piece-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.piece-list li {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.piece-list li:last-child {
+  border-bottom: none;
+}
+
+.piece-list h3 {
+  margin: 0.25rem 0 0.35rem;
+}
+
+.piece-list h3 a {
+  color: var(--color-heading);
+  font-weight: 500;
+}
+
+.piece-list h3 a:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}

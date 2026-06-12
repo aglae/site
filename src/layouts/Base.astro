@@ -1,0 +1,53 @@
+---
+import '@fontsource/fira-sans/500.css';
+import '@fontsource/nunito-sans/500.css';
+import '@fontsource/nunito-sans/700.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { type Lang, altPath } from '../lib/i18n';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: Lang;
+  /** Root-relative path of this page WITHOUT the /es prefix, e.g. "/writing" */
+  path: string;
+  /** Set when the equivalent page exists in the other language */
+  hasAlternate?: boolean;
+}
+
+const { title, description, lang, path, hasAlternate = true } = Astro.props;
+const currentPath = lang === 'en' ? path : `/es${path === '/' ? '' : path}`;
+const alternate = hasAlternate ? altPath(lang, currentPath) : null;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/png" href="/img/favicon-aglae.png" />
+    {
+      alternate && (
+        <link
+          rel="alternate"
+          hreflang={lang === 'en' ? 'es' : 'en'}
+          href={alternate}
+        />
+      )
+    }
+    <script is:inline>
+      // Apply saved theme before paint to avoid flash
+      const saved = localStorage.getItem('theme');
+      if (saved) document.documentElement.dataset.theme = saved;
+    </script>
+  </head>
+  <body>
+    <Header lang={lang} path={path} alternate={alternate} />
+    <slot />
+    <Footer lang={lang} />
+  </body>
+</html>

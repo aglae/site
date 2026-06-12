@@ -1,0 +1,55 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PieceMeta from '../components/PieceMeta.astro';
+import Echoes from '../components/Echoes.astro';
+import { type Lang, localePath } from '../lib/i18n';
+import { type Piece, getPieces, echoPool, pieceSlug } from '../lib/forest';
+
+interface Props {
+  lang: Lang;
+  piece: Piece;
+}
+
+const { lang, piece } = Astro.props;
+const { Content } = await render(piece);
+
+const siblings = await getPieces(lang);
+const pool = echoPool(piece, siblings);
+
+// Other-language version exists?
+const otherLang: Lang = lang === 'en' ? 'es' : 'en';
+const otherPieces = await getPieces(otherLang);
+const hasAlternate = otherPieces.some((p) => pieceSlug(p) === pieceSlug(piece));
+---
+
+<Base
+  title={piece.data.title}
+  lang={lang}
+  path={`/writing/${pieceSlug(piece)}`}
+  hasAlternate={hasAlternate}
+>
+  <main>
+    <article class="container">
+      <h1>{piece.data.title}</h1>
+      <PieceMeta lang={lang} piece={piece} />
+      <Content />
+      <div class="piece-themes">
+        {
+          piece.data.themes.map((theme) => (
+            <a class="theme-tag" href={localePath(lang, `/writing/theme/${theme}`)}>
+              {theme}
+            </a>
+          ))
+        }
+      </div>
+      <Echoes lang={lang} pool={pool} />
+    </article>
+  </main>
+</Base>
+
+<style>
+  .piece-themes {
+    margin-top: 3rem;
+  }
+</style>
